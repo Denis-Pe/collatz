@@ -1,4 +1,3 @@
-use num_cpus;
 use std::thread;
 
 const STEP: u128 = 5_000_000;
