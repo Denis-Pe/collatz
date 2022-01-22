@@ -1,10 +1,15 @@
 use std::thread;
+use std::io;
 
 const STEP: u128 = 5_000_000;
 
-fn main() {
+fn main() -> io::Result<()> {
   let threads = num_cpus::get();
-  let mut subject = 0u128;
+
+  print!("From which number do we start? ");
+  let mut input = String::new();
+  io::stdin().read_line(&mut input)?;
+  let mut subject: u128 = input.trim().parse().expect("Expected numerical input");
 
   loop {
     println!("Iteration -- {}", subject);
