@@ -2,6 +2,7 @@ use std::thread;
 use std::io::{self, Write};
 
 const STEP: u128 = 5_000_000;
+const PRINTING: u128 = 100_000_000_000; // to stop spamming numbers, this is very fast to print each few million
 
 fn main() -> io::Result<()> {
   let threads = num_cpus::get();
@@ -13,7 +14,9 @@ fn main() -> io::Result<()> {
   let mut subject: u128 = input.trim().parse().expect("Expected numerical input >= 0");
 
   loop {
-    println!("Iteration -- {}", subject);
+    if subject % PRINTING == 0 {
+      println!("Iteration -- {}", subject);
+    }
     let mut threadvec = Vec::with_capacity(threads);
 
     for _thread in 0..threads {
