@@ -1,5 +1,5 @@
 use std::thread;
-use std::io;
+use std::io::{self, Write};
 
 const STEP: u128 = 5_000_000;
 
@@ -7,6 +7,7 @@ fn main() -> io::Result<()> {
   let threads = num_cpus::get();
 
   print!("From which number do we start? ");
+  io::stdout().flush()?;
   let mut input = String::new();
   io::stdin().read_line(&mut input)?;
   let mut subject: u128 = input.trim().parse().expect("Expected numerical input");
