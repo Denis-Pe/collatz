@@ -1,20 +1,24 @@
 use std::thread;
 use std::io::{self, Write};
 
-const STEP: u128 = 5_000_000;
-const PRINTING: u128 = 100_000_000_000; // to stop spamming numbers, this is very fast to print each few million
-
 fn main() -> io::Result<()> {
   let threads = num_cpus::get();
 
-  print!("From which number do we start? ");
-  io::stdout().flush()?;
   let mut input = String::new();
-  io::stdin().read_line(&mut input)?;
+  read_input("From which number do we start? ", &mut input)?;
   let mut subject: u128 = input.trim().parse().expect("Expected numerical input >= 0");
 
+  let mut input = String::new(); // Parsing throws a ParseIntError { kind: InvalidDigit } if I try to use the same string for everything
+  read_input("What is the desired step? ", &mut input)?;
+  let step: u128        = input.trim().parse().expect("Expected numerical input >= 0");
+
+  let mut input = String::new();
+  read_input("I'll print the number each this number of iterations: ", &mut input)?;
+  let printing: u128    = input.trim().parse().expect("Expected numerical input >= 0");
+  let printing = printing*step;
+
   loop {
-    if subject % PRINTING == 0 {
+    if subject % printing == 0 {
       println!("Iteration -- {}", subject);
     }
     let mut threadvec = Vec::with_capacity(threads);
@@ -36,11 +40,18 @@ fn main() -> io::Result<()> {
 
       threadvec.push(thread::spawn(processing));
 
-      subject += STEP;
+      subject += step;
     }
 
     for thread in threadvec {
       thread.join().expect("PANIC");
     }
   }
+}
+
+fn read_input(msg: &str, string: &mut String) -> io::Result<()> {
+  print!("{}", msg);
+  io::stdout().flush()?;
+  io::stdin().read_line(string)?;
+  Ok(())
 }
