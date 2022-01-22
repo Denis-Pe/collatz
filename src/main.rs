@@ -4,18 +4,17 @@ use std::io::{self, Write};
 fn main() -> io::Result<()> {
   let threads = num_cpus::get();
 
-  let mut input = String::new();
-  read_input("From which number do we start? ", &mut input)?;
+  let input = read_input("From which number do we start? ")?;
   let mut subject: u128 = input.trim().parse().expect("Expected numerical input >= 0");
 
-  let mut input = String::new(); // Parsing throws a ParseIntError { kind: InvalidDigit } if I try to use the same string for everything
-  read_input("What is the desired step? ", &mut input)?;
-  let step: u128        = input.trim().parse().expect("Expected numerical input >= 0");
+  let input = read_input("What is the desired step? ")?;
+  let step:        u128 = input.trim().parse().expect("Expected numerical input >= 0");
 
-  let mut input = String::new();
-  read_input("I'll print the number each this number of iterations: ", &mut input)?;
-  let printing: u128    = input.trim().parse().expect("Expected numerical input >= 0");
+  let input = read_input("I'll print the number each this number of iterations: ")?;
+  let printing:    u128 = input.trim().parse().expect("Expected numerical input >= 0");
   let printing = printing*step;
+
+  drop(input); // makes me happy to drop these bytes before entering the loop :)
 
   loop {
     if subject % printing == 0 {
@@ -49,9 +48,10 @@ fn main() -> io::Result<()> {
   }
 }
 
-fn read_input(msg: &str, string: &mut String) -> io::Result<()> {
+fn read_input(msg: &str) -> io::Result<String> {
+  let mut string = String::new();
   print!("{}", msg);
   io::stdout().flush()?;
-  io::stdin().read_line(string)?;
-  Ok(())
+  io::stdin().read_line(&mut string)?;
+  Ok(string)
 }
