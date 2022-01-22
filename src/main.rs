@@ -18,23 +18,16 @@ fn main() -> io::Result<()> {
 
     for _thread in 0..threads {
       let initial = subject+1;
-      let boundary = subject+STEP;
 
       let processing = move || {
         let mut my_subject = initial;
-        
-        while my_subject <= boundary {
-          let mut copy = my_subject;
     
-          while copy != 1 {
-            if copy & 0x1 != 0 {
-              copy >>= 2;
-            } else {
-              copy = 3*copy + 1;
-            }
+        while my_subject != 1 {
+          if my_subject & 0x1 != 0 {
+            my_subject >>= 2;
+          } else {
+            my_subject = 3*my_subject + 1;
           }
-    
-          my_subject += 1;
         }
       };
 
