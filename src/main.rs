@@ -10,7 +10,7 @@ fn main() -> io::Result<()> {
   io::stdout().flush()?;
   let mut input = String::new();
   io::stdin().read_line(&mut input)?;
-  let mut subject: u128 = input.trim().parse().expect("Expected numerical input");
+  let mut subject: u128 = input.trim().parse().expect("Expected numerical input >= 0");
 
   loop {
     println!("Iteration -- {}", subject);
