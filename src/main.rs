@@ -27,8 +27,8 @@ fn main() -> io::Result<()> {
           let mut copy = my_subject;
     
           while copy != 1 {
-            if copy & 0x1 != 0 {
-              copy >>= 2;
+            if copy & 0x1 == 0 {
+              copy >>= 1;
             } else {
               copy = 3*copy + 1;
             }
