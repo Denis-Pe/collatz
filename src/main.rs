@@ -29,8 +29,8 @@ fn main() -> io::Result<()> {
         let mut my_subject = initial;
     
         while my_subject != 1 {
-          if my_subject & 0x1 != 0 {
-            my_subject >>= 2;
+          if my_subject & 0x1 == 0 {
+            my_subject >>= 1;
           } else {
             my_subject = 3*my_subject + 1;
           }
