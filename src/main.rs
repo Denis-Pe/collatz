@@ -5,16 +5,22 @@ fn main() -> io::Result<()> {
   let threads = num_cpus::get();
 
   let input = read_input("From which number do we start? ")?;
-  let mut subject: u128 = input.trim().parse().expect("Expected numerical input >= 0");
+  let mut subject:  u128 = input.trim().parse().expect("Expected numerical input >= 0");
 
-  let input = read_input("What is the desired step? ")?;
-  let step:        u128 = input.trim().parse().expect("Expected numerical input >= 0");
+  let input = read_input("What is the desired step (I'll skip this many numbers each iteration, type 1 to test every number)? ")?;
+  let step:         u128 = input.trim().parse().expect("Expected numerical input >= 0");
 
   let input = read_input("I'll print the number each this number of iterations: ")?;
-  let printing:    u128 = input.trim().parse().expect("Expected numerical input >= 0");
-  let printing = printing*step;
+  let mut printing: u128 = input.trim().parse().expect("Expected numerical input >= 0");
+  printing = printing*step;
 
-  drop(input); // makes me happy to drop these bytes before entering the loop :)
+  while printing < threads as u128 {
+    let input = read_input(&format!("That number will not work with your number of threads, try {} or a multiple of it", threads as u128/step))?;
+    printing =             input.trim().parse().expect("Expected numerical input >= 0");
+    printing = printing*step;
+  }
+
+  drop(input); // makes me happy to drop these few bytes before entering the loop :)
 
   loop {
     if subject % printing == 0 {
